@@ -23,6 +23,11 @@ public class MainActivity extends ActionBarActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new ColorAdapter());
+
+        PusherTabStrip pusherTabStrip = (PusherTabStrip) findViewById(R.id.pusher_tab_strip);
+        pusherTabStrip.bindViewPager(viewPager, new String[] {
+                "Blue", "Red", "Green"
+        });
     }
 
     private class ColorAdapter extends PagerAdapter {
