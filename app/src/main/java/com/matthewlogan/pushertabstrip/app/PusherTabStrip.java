@@ -19,6 +19,9 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
     private int mCurrentPosition;
     private int mCurrentOffsetPixels;
 
+    private boolean mPushingLeft;
+    private boolean mPushingRight;
+
     public PusherTabStrip(Context context) {
         this(context, null);
     }
@@ -81,45 +84,50 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
     }
 
     private void layoutTextViews() {
-        for (int i = 0; i < mTextViews.length; i++) {
+        TextView curTextView = mTextViews[mCurrentPosition];
 
-            if (i < mCurrentPosition - 1) {
-                TextView behindTextView = mTextViews[i];
-                behindTextView.setX(0.f - behindTextView.getMeasuredWidth());
+        float center = getWidth() / 2.f - curTextView.getMeasuredWidth() / 2.f;
+        float curX = center - mCurrentOffsetPixels;
+        if (curX < 0) {
+            curX = 0;
+        }
 
-            } else if (i == mCurrentPosition - 1) {
-                TextView prevTextView = mTextViews[i];
-                prevTextView.setX(0.f);
+        curTextView.setX(curX);
 
-            } else if (i == mCurrentPosition) {
-                TextView currentTextView = mTextViews[i];
+        if (mCurrentPosition > 0) {
+            TextView prevTextView = mTextViews[mCurrentPosition - 1];
 
-                float center = getWidth() / 2.f - currentTextView.getMeasuredWidth() / 2.f;
-                float x = center - mCurrentOffsetPixels;
-                if (x < 0) {
-                    x = 0;
+            // Deal with being pushed left
+            float prevX = 0.f;
+            if (curX <= prevTextView.getWidth()) {
+                prevX = curX - prevTextView.getWidth();
+            }
+
+            prevTextView.setX(prevX);
+        }
+
+        if (mCurrentPosition < mTextViews.length - 1) {
+            TextView nextTextView = mTextViews[mCurrentPosition + 1];
+
+            // Deal with movement
+            float nextRight = getWidth() - nextTextView.getMeasuredWidth();
+            float nextCenter = getWidth() / 2.f - nextTextView.getMeasuredWidth() / 2.f;
+            float distanceToMove = nextRight - nextCenter;
+
+            float nextX = nextRight;
+            if (getWidth() - mCurrentOffsetPixels <= distanceToMove) {
+                nextX = nextRight - (distanceToMove - (getWidth() - mCurrentOffsetPixels));
+            }
+
+            nextTextView.setX(nextX);
+
+            if (mCurrentPosition < mTextViews.length - 2) {
+                TextView nextNextTextView = mTextViews[mCurrentPosition + 2];
+
+                // Deal with being pushed right
+                if (nextTextView.getX() + nextTextView.getWidth() > nextNextTextView.getX()) {
+                    nextNextTextView.setX(nextTextView.getX() + nextTextView.getWidth());
                 }
-
-                currentTextView.setX(x);
-
-            } else if (i == mCurrentPosition + 1) {
-                TextView nextTextView = mTextViews[i];
-
-                float right = getWidth() - nextTextView.getMeasuredWidth();
-                float center = getWidth() / 2.f - nextTextView.getMeasuredWidth() / 2.f;
-                float distanceToMove = right - center;
-
-                float x = right;
-                if (getWidth() - mCurrentOffsetPixels <= distanceToMove) {
-                    x = center + (getWidth() - mCurrentOffsetPixels);
-                }
-
-                nextTextView.setX(x);
-
-            } else if (i > mCurrentPosition + 1) {
-                TextView aheadTextView = mTextViews[i];
-                aheadTextView.setX(getWidth());
-
             }
         }
     }
