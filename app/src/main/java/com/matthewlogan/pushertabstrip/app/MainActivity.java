@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
         PusherTabStrip pusherTabStrip = (PusherTabStrip) findViewById(R.id.pusher_tab_strip);
         pusherTabStrip.bindViewPager(viewPager, new String[] {
-                "Blue", "Red", "Green"
+                "Blue", "Red", "Green", "Yellow", "Magenta"
         });
     }
 
@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 5;
         }
 
         @Override
@@ -56,6 +56,12 @@ public class MainActivity extends ActionBarActivity {
                     break;
                 case 2:
                     backgroundColor = Color.GREEN;
+                    break;
+                case 3:
+                    backgroundColor = Color.YELLOW;
+                    break;
+                case 4:
+                    backgroundColor = Color.MAGENTA;
                     break;
             }
             view.setBackgroundColor(backgroundColor);

@@ -18,6 +18,8 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
     private int mCurrentPosition;
     private int mCurrentOffsetPixels;
 
+    private boolean mDidInitialLayout;
+
     public PusherTabStrip(Context context) {
         this(context, null);
     }
@@ -35,9 +37,6 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
     }
 
     public void bindViewPager(ViewPager viewPager, String[] titles) {
-        mViewPager = viewPager;
-        mViewPager.setOnPageChangeListener(this);
-
         mTextViews = new TextView[titles.length];
 
         for (int i = 0; i < titles.length; i++) {
@@ -57,7 +56,8 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
             mTextViews[i] = textView;
         }
 
-        layoutTextViews();
+        mViewPager = viewPager;
+        mViewPager.setOnPageChangeListener(this);
     }
 
     @Override
@@ -65,7 +65,11 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
         mCurrentPosition = position;
         mCurrentOffsetPixels = positionOffsetPixels;
 
-        layoutTextViews();
+        if (mDidInitialLayout) {
+            layoutTextViews();
+        } else {
+            initialLayoutTextViews();
+        }
     }
 
     @Override
@@ -76,6 +80,28 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    private void initialLayoutTextViews() {
+        for (int i = 0; i < mTextViews.length; i++) {
+            if (i < mCurrentPosition - 1) {
+                mTextViews[i].setX(-mTextViews[i].getMeasuredWidth());
+
+            } else if (i == mCurrentPosition - 1) {
+                mTextViews[i].setX(0.f);
+
+            } else if (i == mCurrentPosition) {
+                mTextViews[i].setX(getWidth() / 2.f - mTextViews[i].getMeasuredWidth() / 2.f);
+
+            } else if (i == mCurrentPosition + 1) {
+                mTextViews[i].setX(getWidth() - mTextViews[i].getMeasuredWidth());
+
+            } else if (i > mCurrentPosition) {
+                mTextViews[i].setX(getWidth());
+            }
+        }
+
+        mDidInitialLayout = true;
     }
 
     private void layoutTextViews() {
