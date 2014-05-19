@@ -1,4 +1,4 @@
-package com.matthewlogan.pushertabstrip.app;
+package com.matthewlogan.pushertabstrip.lib;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -49,8 +49,8 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
 
             addView(textView);
 
-            RelativeLayout.LayoutParams lp =
-                    (RelativeLayout.LayoutParams) textView.getLayoutParams();
+            LayoutParams lp =
+                    (LayoutParams) textView.getLayoutParams();
             if (lp != null) {
                 lp.addRule(CENTER_VERTICAL);
                 textView.setLayoutParams(lp);

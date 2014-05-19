@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.matthewlogan.pushertabstrip.lib.PusherTabStrip;
+
 
 public class MainActivity extends ActionBarActivity {
 
