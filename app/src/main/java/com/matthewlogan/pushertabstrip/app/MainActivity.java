@@ -25,9 +25,7 @@ public class MainActivity extends ActionBarActivity {
         viewPager.setAdapter(new ColorAdapter());
 
         PusherTabStrip pusherTabStrip = (PusherTabStrip) findViewById(R.id.pusher_tab_strip);
-        pusherTabStrip.bindViewPager(viewPager, new String[] {
-                "Blue", "Red", "Green", "Yellow", "Magenta"
-        });
+        pusherTabStrip.setViewPager(viewPager);
     }
 
     private class ColorAdapter extends PagerAdapter {
@@ -69,6 +67,28 @@ public class MainActivity extends ActionBarActivity {
             container.addView(view);
 
             return view;
+        }
+
+        public CharSequence getPageTitle (int position) {
+            String title = null;
+            switch (position) {
+                case 0:
+                    title = "Blue";
+                    break;
+                case 1:
+                    title = "Red";
+                    break;
+                case 2:
+                    title = "Green";
+                    break;
+                case 3:
+                    title = "Yellow";
+                    break;
+                case 4:
+                    title = "Magenta";
+                    break;
+            }
+            return title;
         }
 
         @Override

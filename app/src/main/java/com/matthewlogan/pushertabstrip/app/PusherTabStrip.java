@@ -36,13 +36,16 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
         setWillNotDraw(false);
     }
 
-    public void bindViewPager(ViewPager viewPager, String[] titles) {
-        mTextViews = new TextView[titles.length];
+    public void setViewPager(ViewPager viewPager) {
+        mViewPager = viewPager;
+        mViewPager.setOnPageChangeListener(this);
 
-        for (int i = 0; i < titles.length; i++) {
+        mTextViews = new TextView[mViewPager.getAdapter().getCount()];
+
+        for (int i = 0; i < mTextViews.length; i++) {
             TextView textView = new TextView(mContext);
 
-            textView.setText(titles[i]);
+            textView.setText(mViewPager.getAdapter().getPageTitle(i));
 
             addView(textView);
 
@@ -55,9 +58,6 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
 
             mTextViews[i] = textView;
         }
-
-        mViewPager = viewPager;
-        mViewPager.setOnPageChangeListener(this);
     }
 
     @Override
