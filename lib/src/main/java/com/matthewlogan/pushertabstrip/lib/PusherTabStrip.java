@@ -3,11 +3,12 @@ package com.matthewlogan.pushertabstrip.lib;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageChangeListener {
+public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private Context mContext;
 
@@ -43,9 +44,11 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
         mTextViews = new TextView[mViewPager.getAdapter().getCount()];
 
         for (int i = 0; i < mTextViews.length; i++) {
-            TextView textView = new TextView(mContext);
+            final TextView textView = new TextView(mContext);
 
             textView.setText(mViewPager.getAdapter().getPageTitle(i));
+
+            textView.setOnClickListener(this);
 
             addView(textView);
 
@@ -80,6 +83,15 @@ public class PusherTabStrip extends RelativeLayout implements ViewPager.OnPageCh
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        for (int i = 0; i < mTextViews.length; i++) {
+            if (v.equals(mTextViews[i])) {
+                mViewPager.setCurrentItem(i, true);
+            }
+        }
     }
 
     private void initialLayoutTextViews() {
